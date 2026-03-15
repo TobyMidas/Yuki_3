@@ -1,0 +1,9 @@
+./vagrant
+
+*.log
+*.retry
+
+__pycache__/
+*.pyc
+
+hosts
