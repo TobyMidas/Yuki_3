@@ -1,18 +1,22 @@
 #!/bin/bash
+vagrant up
 
+#This extracts the IP addresses and stores as a variable
 WEB_IP=$(vagrant ssh web -c 'hostname -I' | awk '{print $2}')
 DB_IP=$(vagrant ssh db -c 'hostname -I' | awk '{print $2}')
 
+# This sends all the ip addresses to a file names host
 cat <<EOF > hosts
 [web]
-$WEB_IP
+$WEB_IP ansible_user=vagrant
 
 [db]
-$DB_IP
+$DB_IP ansible_user=vagrant
 EOF
 
 echo "Inventory generated:"
 cat hosts
+echo "___________________________________---"
 
 #This updates hosts and downloads ansible
 for VM in web db; do
