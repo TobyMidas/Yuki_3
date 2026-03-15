@@ -14,8 +14,18 @@ EOF
 echo "Inventory generated:"
 cat hosts
 
-vagrant ssh web -c "
-sudo apt update &&
-sudo apt install -y ansible &&
-ansible-playbook -i /vagrant/hosts /vagrant/playbook.yml
-"
+#This updates hosts and downloads ansible
+for VM in web db; do
+    echo "Running playbook on $VM"
+    vagrant ssh $VM -c "
+    sudo apt update &&
+    sudo apt install -y ansible &&
+    ansible-playbook -i /vagrant/hosts /vagrant/playbook.yml
+    "
+done
+
+echo "Playbook completed on both vms"
+
+#This ssh into web and db and confirms ansible is present
+vagrant ssh web -c "sudo systemctl status nginx"
+vagrant ssh db -c "sudo systemctl status nginx"
